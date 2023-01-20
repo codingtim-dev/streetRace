@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driving Simulator</title>
+    <link rel="stylesheet" href="resources/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <div id="content">
+        
+        <div class="street-view" id="view">
+            <ul class="border">
+                <li>#</li>
+                <li>#</li>
+                <li>#</li>
+                <li>#</li>
+                <li>#</li>
+            </ul>
+            <ul class="lane">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                
+            </ul>
+            <ul class="lane">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul class="lane">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul class="border">
+                <li>#</li>
+                <li>#</li>
+                <li>#</li>
+                <li>#</li>
+                <li>#</li>
+            </ul>
+        </div>
+       
+        <div class="gameOver" id="gameover">
+            <h3>Game over</h3>
+            <button onclick="game.start">Start</button>
+        </div>
+    </div>
+    <script src="resources/player.js"></script>
+    <script src="resources/logic.js"></script>
+</body>
+</html>
