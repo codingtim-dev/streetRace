@@ -1,33 +1,43 @@
 //import Player from "./player"
 
-
+run= true
 let player = new Player()
+let possibleFieldsToMove = []
 
 class Game {
 
     isRunning = true;
     tileOnScreen = false
-    possibleFieldsToMove = [];
-
+    //possibleFieldsToMove = [];
 
 
 
     constructor() {
 
+        // get all the lanes of the html site 
+        // later generate a specific amount of lanes and store them into this variable
         this.streetView = document.getElementsByClassName("lane");
+
+        // the obstacles should run async to avoid any other runtime errors
         this.timer = ms => new Promise(res => setTimeout(res, ms));
-        this.fps = 10
+
+        //set the fps 
+        this.fps = 20
         this.interval = 1000
+
+        // to control the user input and avoid multiple actions handlers
         this.isFired = false
-        this.savePossibleFields = this.savePossibleFields()
+
+        //save the fields, where the player can move
+        this.savePossibleFields()
     }
 
-
+    // start this method to run all things
     start() {
         
         // safe possible spots to walk in array
         
-
+        player.instantiatePlayer()
         // set the default state of the player
         this.createPlayer(player.playerPosition)
 
@@ -38,11 +48,11 @@ class Game {
         
     }
 
-
+    // draw the player character
     drawPlayer() {
-        console.log(this.savePossibleFields[player.playerPosition])
+        console.log(possibleFieldsToMove[player.playerPosition])
 
-        this.savePossibleFields[player.playerPosition].innerHTML = "+"
+        possibleFieldsToMove[player.playerPosition].innerHTML = "+"
 
 
     }
@@ -52,21 +62,19 @@ class Game {
 
         posLanes.forEach(lane => {
             let laneMore = Array.from(lane.getElementsByTagName("li"))
-            this.possibleFieldsToMove.push(laneMore[4])
+            possibleFieldsToMove.push(laneMore[4])
         })
 
-        console.log(this.possibleFieldsToMove)
+        console.log(possibleFieldsToMove)
 
-        return this.possibleFieldsToMove;
+       
     }
 
     createPlayer(position) {
 
 
         // store all possible fields in an arra
-        this.playerPos = this.possibleFieldsToMove[position];
-
-
+        this.playerPos = possibleFieldsToMove[position];
         this.playerPos.innerHTML = "+"
 
     }
@@ -81,7 +89,7 @@ class Game {
                 switch (event.code) {
                     case "ArrowLeft":
                         // handle left arrow press
-                        this.possibleFieldsToMove[player.playerPosition].innerHTML = " "
+                        possibleFieldsToMove[player.playerPosition].innerHTML = " "
                         player.movePlayerLeft()
                         this.drawPlayer()
 
@@ -96,7 +104,7 @@ class Game {
                         break;
 
                     case "ArrowRight":
-                        this.possibleFieldsToMove[player.playerPosition].innerHTML = " "
+                        possibleFieldsToMove[player.playerPosition].innerHTML = " "
                         player.movePlayerRight()
                         this.drawPlayer()
                         // handle right arrow press
@@ -135,23 +143,25 @@ class Game {
             this.tileOnScreen = true
             for (let i = 0; i < tiles.length; i++) {
 
-                tiles[i].innerHTML = "*"
-
-                if (i != 0) {
-                    tiles[i - 1].innerHTML = " "
-                }
-
-                await this.timer(500); // then the created Promise can be awaited
-
                 if (i == tiles.length - 1) {
-                    if(tiles[i].innerHTML = "+"){
+                    if(tiles[i].innerHTML ==  "+"){
                         console.log("game over")
                         this.gameOver()
                     }
                     tiles[i].innerHTML = " "
                     this.tileOnScreen = false
                 }
+                tiles[i].innerHTML = "*"
+
+                if (i != 0 ) {
+                    tiles[i - 1].innerHTML = " "
+                }
+
+                await this.timer(500); // then the created Promise can be awaited
+
+                
             }
+            tiles[4].innerHTML = ""
         }
 
     }
@@ -162,22 +172,12 @@ class Game {
 
         const gameTable = document.getElementById("view");
         gameTable.style.display = "none"
-        this.isRunning = false
+        run = false
     }
 
     gameLoop() {
 
-        if(this.isRunning){
-            document.addEventListener("keydown", function (event) {
-                if (event.key == " " || event.code == "Space" || event.keyCode == 32) {
-                    this.isRunning = true
-                    console.log(this.isRunning)
-    
-    
-                }
-            })
-    
-    
+        if(run){
             this.moveObstacle(this.streetView);
     
             this.updatePlayer()
@@ -190,11 +190,22 @@ class Game {
         
     }
 }
-
-
 const game = new Game()
 
-game.start()
+document.addEventListener("keydown", function(event){
+    if(event.keyCode ==32){
+        const startFont = document.getElementById("information");
+        startFont.style.display = "none"
+        // start the game
+        game.start()
+
+        // hide the start font
+        
+    }
+})
+
+
+
 //let playerPos = game.createPlayer()
 //game.savePossibleFields()
 //game.createPlayer()
