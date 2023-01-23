@@ -8,13 +8,18 @@ const container = document.getElementById("view");
 
 
 
-console.log(playground)
-console.log(moveableFields)
+
 
 function createPlayground(form){
     rows = form.rows.value
 
+    if(rows == 0 || rows == 1){
+        return
+    }
+    rows ++;
+
     document.getElementById("setup").style.display = "none"
+    document.getElementById("information").style.display = "block"
 
         // instantiate playground
     for(let i = 0; i <= rows; i++){
@@ -30,7 +35,7 @@ function createPlayground(form){
             row.append(rowElement)
 
 
-            if(i == 0 || i == rows){
+            if(i == 0 || i == rows ){
                 //playground[i][j] = "#"    
                 playground[i][j] = rowElement
                 rowElement.innerHTML = "####"
@@ -39,20 +44,27 @@ function createPlayground(form){
             }else if(i > 0 && i < rows && j == 10){
                 playground[i][j] = rowElement;
                 rowElement.innerHTML = ""
-                moveableFields.push(playground[i][j])
+                
 
             }
             else{
                 //playground[i][j] = "1"
                 playground[i][j] = rowElement
-                rowElement.innerHTML = " "
+                rowElement.innerHTML = ""
                 row.classList.add("lane")
             }
             
         }
 
+        
         container.append(row)
-
+        
     }
+
+    for(let k = 1; k < rows ; k++){
+        moveableFields.push(playground[k][10])
+    }
+
+    console.log(moveableFields)
 }
 

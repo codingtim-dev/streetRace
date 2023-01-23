@@ -24,7 +24,21 @@ body{
     flex-direction: column;
 }
 
+#headline{
+    
+    font-size: 4rem;
+}
+
+#view {
+    display: none;
+    border-radius: 5px;
+    padding: 5%;
+    background-color: rgb(65, 65, 65  ) ;
+    
+}
+
 #information{
+    display: none;
     font-size: 2rem;
     position: absolute;
     opacity: 0.6;
@@ -41,17 +55,35 @@ form{
 }
 
 form #amount{
-    margin: 50px auto;
+    height: 3rem;
+    border-radius: 5px;
+    margin: 25px 50px ;
     border: 1px white solid;
     background-color: transparent;
     color: white;
+    text-align: center;
+}
+
+form #amount:focus{
+    background-color: white;
+    color: black;
 }
 
 form #submit{
+    margin: 50px 50px;
+    height: 3rem;
+    border-radius: 5px;
     border: 1px solid white;
     color: white;
     background-color: transparent;
     cursor: pointer;
+
+    transition: background-color 1.5s ease-in forwards;
+}
+
+form #submit:hover{
+    background-color: white;
+    color: black;
 }
 #score {
     color: white;
@@ -87,46 +119,48 @@ form #submit{
     
     list-style: none;
     display: flex;
+    display: inline-block;
+    
+    
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding-inline-start: 0;
     text-align: center;
     font-size: 25px;
-    color: red;
+    color: blue;
     
 }
 
-
-
-.street-view .lane{
-    display: inline-block;
-    justify-content: safe;
-    width: 50px;
-    
-    
-}
 
 .street-view .lane li{
-    height: 20px;
     width: 20px;
+    height: 20px;
 }
+
+.lane li:nth-last-child(){
+    color: red;
+}
+
+
 
 
 .gameOver{
-    position: absolute;
-    display: none;
+    
+    
     width: 50%;
-    height: 200px;
+    
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
     flex-direction: column;
+    padding: auto;
 }
 
 #gameover{
     display: none;
+
 }
 
 #gameover button{

@@ -1,7 +1,7 @@
 
 
 // create a galaxy atmosphere with some fany animations
-let starsAmount = 50;
+let starsAmount = 100;
 let starsLength = "3px";
 let stars = []
 
@@ -21,8 +21,10 @@ for(let i = 0; i < starsAmount; i++){
     
     
     star.classList.add("star")
+
+    star.style.width = Math.random() * 7 + "px"
     
-    star.style.height = Math.random() * 7 + "px"
+    star.style.height = Math.random() * 50 + "px"
 
 
     let top=Math.random();
@@ -44,17 +46,17 @@ console.log("Star created")
 
 stars.forEach((el, i, ra) => {
     let to = {
-      x: Math.random() * (11),
-      y: Math.random() * 12
+      x: Math.random() * (11)  ,
+      y: Math.random() * 200
     };
   
     let anim = el.animate(
       [
-        { transform: "translate(0, 0)" },
-        { transform: `translate(0, ${to.y}rem)` }
+        { transform: "translate(0, 0)", opacity: 0.8 },
+        { transform: `translate(0, ${to.y}rem)` , opacity: 0}
       ],
       {
-        duration: (Math.random() + 1) * 2000, // random duration
+        duration: (Math.random() + 1) * 200, // random duration
        
         fill: "both",
         iterations: Infinity,

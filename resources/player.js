@@ -1,11 +1,11 @@
 class Player{
    constructor(){
-    this.playerPosition = Math.floor( playground.length / 2);
+    this.playerPosition = 1
    }
 
    instantiatePlayer(){
 
-    return this.playerPosition;
+        this.playerPosition = 1
    }
 
 
@@ -19,7 +19,7 @@ class Player{
    }
 
    movePlayerRight(){
-        if(this.playerPosition < playground.length - 1){
+        if(this.playerPosition < moveableFields.length -1 ){
             this.playerPosition++;
             return this.playerPosition;
         }
