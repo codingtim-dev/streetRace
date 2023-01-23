@@ -42,6 +42,7 @@ function createPlayground(form){
                 row.classList.add("border")
 
             }else if(i > 0 && i < rows && j == 10){
+                rowElement.style.color = "red"
                 playground[i][j] = rowElement;
                 rowElement.innerHTML = ""
                 
