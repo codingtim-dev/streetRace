@@ -1,18 +1,51 @@
 //import Player from "./player"
+function createGame(){
+    
+    document.getElementById("gameover").style.display = "none"
 
-run= true
-let player = new Player()
-let possibleFieldsToMove = []
+    run= true
+    let newPlayer = new Player()
+    newPlayer.instantiatePlayer()
+    let possibleFieldsToMove = []
+   
+    let newGame = new Game(newPlayer, possibleFieldsToMove)
+
+    document.addEventListener("keydown", function(event){
+        if(event.keyCode ==32){
+            const startFont = document.getElementById("information");
+            startFont.style.display = "none"
+            // start the game
+            newGame.start(newPlayer);
+    
+            // hide the start font
+            
+        }
+    })
+    
+    
+
+    document.getElementById("view").style.display = "flex";
+}
+
+
+// starts the game when the window is loaded
+window.onload = function(){
+    createGame()
+}
+
+
 
 class Game {
 
     isRunning = true;
     tileOnScreen = false
+    score = 0
+
     //possibleFieldsToMove = [];
 
 
 
-    constructor() {
+    constructor(player) {
 
         // get all the lanes of the html site 
         // later generate a specific amount of lanes and store them into this variable
@@ -24,12 +57,14 @@ class Game {
         //set the fps 
         this.fps = 20
         this.interval = 1000
-
+        this.player = player
+        this.possibleFieldsToMove = moveableFields
         // to control the user input and avoid multiple actions handlers
         this.isFired = false
-
+        this.field = playground
+        
         //save the fields, where the player can move
-        this.savePossibleFields()
+        //this.savePossibleFields()
     }
 
     // start this method to run all things
@@ -37,9 +72,9 @@ class Game {
         
         // safe possible spots to walk in array
         
-        player.instantiatePlayer()
+        this.player.instantiatePlayer()
         // set the default state of the player
-        this.createPlayer(player.playerPosition)
+        this.createPlayer(this.player.playerPosition)
 
         // run gameloop in intervals
       
@@ -50,9 +85,9 @@ class Game {
 
     // draw the player character
     drawPlayer() {
-        console.log(possibleFieldsToMove[player.playerPosition])
+        console.log(this.possibleFieldsToMove[this.player.playerPosition])
 
-        possibleFieldsToMove[player.playerPosition].innerHTML = "+"
+        this.possibleFieldsToMove[this.player.playerPosition].innerHTML = "+"
 
 
     }
@@ -60,12 +95,23 @@ class Game {
     savePossibleFields() {
         let posLanes = Array.from(this.streetView);
 
+        let possibleLanes = []
+
+        for(let i = 1; i < playground[i][playground.length]; i++){
+            possibleLanes.push(playground[i][playground.length])
+            
+            
+        }
+        
+
+        console.log(possibleLanes)
+
         posLanes.forEach(lane => {
             let laneMore = Array.from(lane.getElementsByTagName("li"))
-            possibleFieldsToMove.push(laneMore[4])
+            this.possibleFieldsToMove.push(laneMore[4])
         })
 
-        console.log(possibleFieldsToMove)
+        //console.log(this.possibleFieldsToMove)
 
        
     }
@@ -74,9 +120,13 @@ class Game {
 
 
         // store all possible fields in an arra
-        this.playerPos = possibleFieldsToMove[position];
+        this.playerPos = this.possibleFieldsToMove[position];
         this.playerPos.innerHTML = "+"
 
+    }
+
+    updateScore(){
+        document.getElementById("score").innerHTML = this.score
     }
 
 
@@ -89,8 +139,8 @@ class Game {
                 switch (event.code) {
                     case "ArrowLeft":
                         // handle left arrow press
-                        possibleFieldsToMove[player.playerPosition].innerHTML = " "
-                        player.movePlayerLeft()
+                        this.possibleFieldsToMove[this.player.playerPosition].innerHTML = " "
+                        this.player.movePlayerLeft()
                         this.drawPlayer()
 
 
@@ -104,8 +154,8 @@ class Game {
                         break;
 
                     case "ArrowRight":
-                        possibleFieldsToMove[player.playerPosition].innerHTML = " "
-                        player.movePlayerRight()
+                        this.possibleFieldsToMove[this.player.playerPosition].innerHTML = " "
+                        this.player.movePlayerRight()
                         this.drawPlayer()
                         // handle right arrow press
                         //this.playerPos.innerHTML = " "
@@ -132,36 +182,38 @@ class Game {
 
 
 
-    async moveObstacle() { // We need to wrap the loop into an async function for this to work
-        let randNum = Math.floor(Math.random() * this.streetView.length)
-        let currLane = this.streetView[randNum];
-
-        let tiles = currLane.getElementsByTagName("li");
-
+    async moveObstacle() {
+         // We need to wrap the loop into an async function for this to work
+        let randNum = Math.floor(Math.random() * ( moveableFields.length + 1))
+        let currLane = playground[randNum];
+       
+        //let tiles = currLane.getElementsByTagName("li");
+       
 
         if (this.tileOnScreen == false) {
             this.tileOnScreen = true
-            for (let i = 0; i < tiles.length; i++) {
-
-                if (i == tiles.length - 1) {
-                    if(tiles[i].innerHTML ==  "+"){
+            for (let i = 0; i < currLane.length; i++) {
+                if (i == playground[randNum].length - 1) {
+                    if(playground[randNum][i].innerHTML ==  "+"){
                         console.log("game over")
                         this.gameOver()
                     }
-                    tiles[i].innerHTML = " "
+                    playground[randNum][i].innerHTML = " "
                     this.tileOnScreen = false
                 }
-                tiles[i].innerHTML = "*"
+                playground[randNum][i].innerHTML = "*"
 
                 if (i != 0 ) {
-                    tiles[i - 1].innerHTML = " "
+                    playground[randNum][i - 1].innerHTML = " "
                 }
 
                 await this.timer(500); // then the created Promise can be awaited
 
                 
             }
-            tiles[4].innerHTML = ""
+            this.score++;
+            console.log(this.score)
+            playground[randNum][playground[randNum].length - 1].innerHTML = ""
         }
 
     }
@@ -173,6 +225,7 @@ class Game {
         const gameTable = document.getElementById("view");
         gameTable.style.display = "none"
         run = false
+        delGame(this)
     }
 
     gameLoop() {
@@ -192,28 +245,18 @@ class Game {
 }
 const game = new Game()
 
-document.addEventListener("keydown", function(event){
-    if(event.keyCode ==32){
-        const startFont = document.getElementById("information");
-        startFont.style.display = "none"
-        // start the game
-        game.start()
-
-        // hide the start font
-        
-    }
-})
 
 
 
+function delGame(game){
+    delete game;
+    delete player;
+}
 //let playerPos = game.createPlayer()
 //game.savePossibleFields()
 //game.createPlayer()
 
 
-
-
-//game.gameLoop()
 
 
 

@@ -10,7 +10,7 @@ contain.style.position = "absolute"
 contain.style.width = "100%"
 contain.style.height = "100vh"
 contain.style.top = "0"
-contain.style.zIndex = "9999"
+contain.style.zIndex = "99"
 contain.style.overflow = "hidden"
 
 document.body.append(contain)

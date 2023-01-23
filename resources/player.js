@@ -1,6 +1,6 @@
 class Player{
    constructor(){
-    this.playerPosition = 1
+    this.playerPosition = Math.floor( playground.length / 2);
    }
 
    instantiatePlayer(){
@@ -19,7 +19,7 @@ class Player{
    }
 
    movePlayerRight(){
-        if(this.playerPosition < 2){
+        if(this.playerPosition < playground.length - 1){
             this.playerPosition++;
             return this.playerPosition;
         }
