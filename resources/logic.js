@@ -292,6 +292,14 @@ class Game {
         
     }
 
+    shootDelay(ms){
+        var timer = 0;
+        return function(callback){
+            clearTimeout (timer);
+            timer = setTimeout(callback, ms);
+        };
+    }
+
     gameLoop() {
 
         if(run){
@@ -306,12 +314,13 @@ class Game {
             document.addEventListener("keydown", async (event) => {
 
                 // secures only one input at the time when the user presses the arrow keys
-                if (!this.shootFired) {
+                if (this.shootFired == false) {
                     this.shootFired= true
                     switch (event.code) {
                         case "ArrowUp":
                             // handle left arrow press
                             this.shootParticlesTo()
+                            this.shootDelay(2000)(() => {this.shootFired = false})
                             break;
     
                         
@@ -320,11 +329,11 @@ class Game {
                             
                     }
     
-                    if(this.shootFired){
-                        return
-                    }
+                }else{
+                    return;
                 }
-                this.shootFired= false
+                
+                
             })
     
             
