@@ -55,7 +55,7 @@ class Game {
         this.timer = ms => new Promise(res => setTimeout(res, ms));
         this.shootTimer = ms => new Promise(res => setTimeout(res, ms))
         //set the fps 
-        this.fps = 20
+        this.fps = 60
         this.interval = 1000
         this.player = player
         this.possibleFieldsToMove = moveableFields
@@ -63,9 +63,9 @@ class Game {
         this.isFired = false
         this.shootFired = false
         this.field = playground
-        this.tempo = 200
+        this.tempo = 110
         this.tilesAmount = 0;
-
+        
         this.obstacleChar = "⋄"
         this.shootParticleItem = "▵"
         //save the fields, where the player can move
@@ -81,7 +81,7 @@ class Game {
         document.getElementById("gameover").style.display = "none"
         
         this.score = 0
-        
+        this.curAmountofObstacles = Math.floor(moveableFields.length / 2);
         this.tilesAmount = 0
         this.player.instantiatePlayer()
       
@@ -164,6 +164,20 @@ class Game {
 
     }
 
+    updateDifficulty(score){
+        switch(score){
+            case 10:
+                this.curAmountofObstacles += 5;
+                break
+                case 20:
+                    this.curAmountofObstacles += 10;
+                    break
+                    case 30:
+                this.curAmountofObstacles += 20;
+                break
+        }
+    }
+
      async shootParticlesTo(){
 
         
@@ -202,7 +216,7 @@ class Game {
         //let tiles = currLane.getElementsByTagName("li");
        
 
-        if(this.tilesAmount < moveableFields.length / 2){
+        if(this.tilesAmount < this.curAmountofObstacles){
             this.tilesAmount++
             this.tileOnScreen = true
             for (let i = 0; i < currLane.length; i++) {
@@ -216,6 +230,7 @@ class Game {
                         // add score
                         this.score ++
                         document.getElementById("score").innerHTML = "Your score is: " + this.score
+                        this.updateDifficulty(this.score)
                         // destroy 
                         break
                     }

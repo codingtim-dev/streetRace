@@ -16,7 +16,7 @@ function createPlayground(form){
     rows = form.rows.value
 
     // handle error input
-    if(rows == 0 || rows == 1){
+    if(rows == 0 || rows == 1 || rows > 15){
         return
     }
     // for better coordination across the moveable fields for the player
