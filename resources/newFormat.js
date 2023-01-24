@@ -44,7 +44,7 @@ function createPlayground(form){
             if(i == 0 || i == rows ){
                 //playground[i][j] = "#"    
                 playground[i][j] = rowElement
-                rowElement.innerHTML = "####"
+                rowElement.innerHTML = "▓▓▓▓"
                 row.classList.add("border")
 
             }else if(i > 0 && i < rows && j == 10){

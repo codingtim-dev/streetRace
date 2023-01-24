@@ -66,8 +66,8 @@ class Game {
         this.tempo = 200
         this.tilesAmount = 0;
 
-        this.obstacleChar = "*"
-        this.shootParticleItem = "+"
+        this.obstacleChar = "⋄"
+        this.shootParticleItem = "▵"
         //save the fields, where the player can move
         //this.savePossibleFields()
     }
@@ -209,7 +209,7 @@ class Game {
                 if(isDestroyed == false){
                     
 
-                    if(playground[randNum][i].innerHTML === this.shootParticleItem ){
+                    if(playground[randNum][i].innerHTML === this.shootParticleItem || ( i < playground[randNum].length -1 && playground[randNum][i+1].innerHTML === this.shootParticleItem )){
                         isDestroyed = true
                         console.log("hit")
 
@@ -236,9 +236,9 @@ class Game {
                         this.tileOnScreen = false
                     }
                     // draw the obstacle after all checking
-                    playground[randNum][i].innerHTML = "*"
+                    playground[randNum][i].innerHTML = this.obstacleChar
                     
-                    if(playground[randNum][playground[randNum].length - 1].innerHTML == "*"){
+                    if(playground[randNum][playground[randNum].length - 1].innerHTML == this.obstacleChar){
                         playground[randNum][playground[randNum].length - 1].innerHTML = ""
                     }
                     

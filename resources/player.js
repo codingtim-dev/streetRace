@@ -2,7 +2,7 @@
 class Player{
    constructor(){
     this.playerPosition = 1
-    this.playerCharacter = "^"
+    this.playerCharacter = "△"
    }
 
    instantiatePlayer(){

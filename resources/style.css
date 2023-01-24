@@ -183,7 +183,7 @@ form #submit:hover{
 }
 
 #score{
-    padding: 5% 0;
+    margin-right: 40px;
     line-height: 2rem;
 }
 
