@@ -88,6 +88,10 @@ form #submit:hover{
     background-color: white;
     color: black;
 }
+
+button{
+    font-family: 'Press Start 2P', cursive;
+}
 #score {
     color: white;
 }
@@ -170,7 +174,7 @@ form #submit:hover{
     
     height: 30px;
     border-radius: 5px;
-    width: 20%;
+    width: auto;
     border: white 1px solid;
     background-color: transparent;
     color: white;

@@ -315,12 +315,14 @@ class Game {
 
                 // secures only one input at the time when the user presses the arrow keys
                 if (this.shootFired == false) {
-                    this.shootFired= true
+                    
                     switch (event.code) {
                         case "ArrowUp":
                             // handle left arrow press
+                            this.shootFired = true
+                            console.log("shoot")
                             this.shootParticlesTo()
-                            this.shootDelay(2000)(() => {this.shootFired = false})
+                            this.shootDelay(1000)(() => {this.shootFired = false})
                             break;
     
                         
@@ -329,8 +331,6 @@ class Game {
                             
                     }
     
-                }else{
-                    return;
                 }
                 
                 
