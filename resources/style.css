@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 *, *::before, *::after{
     box-sizing: border-box;
 }
@@ -11,7 +11,7 @@ body{
 
     background-color: black;
     color: white;
-    font-family: "Inconsolata";
+    font-family: 'Press Start 2P', cursive;
 }
 
 #content{
@@ -22,6 +22,7 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    
 }
 
 #headline{
@@ -33,11 +34,13 @@ body{
     display: none;
     border-radius: 5px;
     padding: 5%;
-    background-color: rgb(65, 65, 65  ) ;
+    border: 2px white solid;
     
 }
 
 #information{
+    border: 2px white solid;
+    padding: 2%;
     display: none;
     font-size: 2rem;
     position: absolute;
@@ -57,7 +60,7 @@ form{
 form #amount{
     height: 3rem;
     border-radius: 5px;
-    margin: 25px 50px ;
+    margin: 25px 10rem ;
     border: 1px white solid;
     background-color: transparent;
     color: white;
@@ -70,7 +73,7 @@ form #amount:focus{
 }
 
 form #submit{
-    margin: 50px 50px;
+    margin: 50px 10rem;
     height: 3rem;
     border-radius: 5px;
     border: 1px solid white;
@@ -99,7 +102,7 @@ form #submit:hover{
 }
 
 .street-view{
-    font-weight: bold;
+    
     display: flex;
     flex-direction: row;
 }

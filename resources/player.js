@@ -1,6 +1,8 @@
+// create a player object to handle the positioning better 
 class Player{
    constructor(){
     this.playerPosition = 1
+    this.playerCharacter = "^"
    }
 
    instantiatePlayer(){
@@ -26,6 +28,8 @@ class Player{
         console.log("right")
         return this.playerPosition
    }
+
+   
 
    
 }

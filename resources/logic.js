@@ -1,14 +1,24 @@
-//import Player from "./player"
+/*
+    main script with the logic behind this game
+    creates a game class where all the input is handled and converted
+*/
+
+// is triggered by clicking the button after getting game over
 function createGame(){
     
+    // switches screen view
     document.getElementById("gameover").style.display = "none"
 
     run= true
+
+    // instantiate new player and new game with the default settings
     let newPlayer = new Player()
     
   
    
     let newGame = new Game(newPlayer, moveableFields)
+
+    // awaits key input of the player
 
     document.addEventListener("keydown", function(event){
         if(event.keyCode ==32){
@@ -34,11 +44,12 @@ window.onload = function(){
 }
 
 
-
+// game object
 class Game {
 
-    isRunning = true;
-    tileOnScreen = false
+   
+   
+    // setting the score 
     score = 0
 
     //possibleFieldsToMove = [];
@@ -53,17 +64,21 @@ class Game {
 
         // the obstacles should run async to avoid any other runtime errors
         this.timer = ms => new Promise(res => setTimeout(res, ms));
-
+        this.shootTimer = ms => new Promise(res => setTimeout(res, ms))
         //set the fps 
         this.fps = 20
-        this.interval = 800
+        this.interval = 1000
         this.player = player
         this.possibleFieldsToMove = moveableFields
         // to control the user input and avoid multiple actions handlers
         this.isFired = false
+        this.shootFired = false
         this.field = playground
         this.tempo = 200
         this.tilesAmount = 0;
+
+        this.obstacleChar = "*"
+        this.shootParticleItem = "+"
         //save the fields, where the player can move
         //this.savePossibleFields()
     }
@@ -72,8 +87,9 @@ class Game {
     start() {
         document.getElementById("view").style.display = "flex";
         // safe possible spots to walk in array
-        this.score =0
+        this.score = 0
         this.player.instantiatePlayer()
+       // this.shootParticlesTo()
         // set the default state of the player
         this.createPlayer(this.player.playerPosition)
 
@@ -82,13 +98,14 @@ class Game {
         setInterval(this.gameLoop.bind(this), this.interval/this.fps)
         
         
+        
     }
 
     // draw the player character
     drawPlayer() {
-        console.log(this.possibleFieldsToMove[this.player.playerPosition])
+        //console.log(this.possibleFieldsToMove[this.player.playerPosition])
 
-        this.possibleFieldsToMove[this.player.playerPosition].innerHTML = "+"
+        this.possibleFieldsToMove[this.player.playerPosition].innerHTML = this.player.playerCharacter
         let field = this.possibleFieldsToMove[this.player-playerPosition]
         
 
@@ -96,23 +113,26 @@ class Game {
 
  
 
-
+    // creates the player at the beginning
     createPlayer(position) {
 
 
         // store all possible fields in an arra
         this.playerPos = this.possibleFieldsToMove[this.player.playerPosition];
-        this.playerPos.innerHTML = "+"
+        this.playerPos.innerHTML = this.player.playerCharacter
 
     }
 
+    
 
 
-
+    // update the player after every frame and handle events
     updatePlayer() {
 
         
         document.addEventListener("keydown", function (event) {
+
+            // secures only one input at the time when the user presses the arrow keys
             if (!this.isFired) {
                 this.isFired = true
                 switch (event.code) {
@@ -138,6 +158,9 @@ class Game {
                         }
 
                         break;
+                    
+                        // shoots
+                        
                 }
 
                 if(this.isFired){
@@ -151,8 +174,36 @@ class Game {
 
     }
 
+     async shootParticlesTo(){
+
+        
+
+        
+        let currLane = playground[this.player.playerPosition + 1] 
+
+        // should create a particle following upwardss
+        for( let i = currLane.length - 2; i > 0; i--){
+
+            // check if there is any collision with obstacle
+            if(currLane[i].innerHTML != ""){
+                console.log("Detect")
 
 
+            }
+            // move the particle 
+            currLane[i].innerHTML = this.shootParticleItem
+
+            if((i +1 ) != currLane.length - 1 ){
+                currLane[i +1].innerHTML = ""
+            }
+            
+            await this.shootTimer(this.tempo)
+            // check if particle reaches top
+        }
+    }
+
+
+    // move obstacle down to the player
     async moveObstacle() {
          // We need to wrap the loop into an async function for this to work
         let randNum = Math.floor(Math.random() * ( moveableFields.length )) + 1
@@ -166,16 +217,23 @@ class Game {
             this.tileOnScreen = true
             for (let i = 0; i < currLane.length; i++) {
                 if (i == playground[randNum].length -1) {
-                    if(playground[randNum][i].innerHTML ===  "+" ){
+                    if(playground[randNum][i].innerHTML ===  this.player.playerCharacter ){
                         console.log("game over")
                         this.gameOver()
+                    }else if(playground[randNum][i].innerHTML ===  this.shootParticleItem || playground[randNum][i - 1].innerHTML ===  this.shootParticleItem ||playground[randNum][i + 1].innerHTML ===  this.shootParticleItem) {
+
+                        // check Collision with shoot particle
+                        playground[randNum][i].innerHTML == ""
+                        return
                     }
+
+                    
                     playground[randNum][i].innerHTML = ""
                     this.tileOnScreen = false
                 }
 
-                this.score ++;
-                document.getElementById("score").innerHTML = this.score
+                //this.score ++;
+                //document.getElementById("score").innerHTML = this.score
                 playground[randNum][i].innerHTML = "*"
 
                 if (i != 0 ) {
@@ -199,6 +257,8 @@ class Game {
 
     }
 
+    
+
     gameOver(){
         const gameOverDiv = document.getElementById("gameover");
         gameOverDiv.style.display = "flex"
@@ -218,9 +278,37 @@ class Game {
             this.moveObstacle();
     
             this.updatePlayer()
-
             
-        }
+            
+            
+            
+            
+            document.addEventListener("keydown", async (event) => {
+
+                // secures only one input at the time when the user presses the arrow keys
+                if (!this.shootFired) {
+                    this.shootFired= true
+                    switch (event.code) {
+                        case "ArrowUp":
+                            // handle left arrow press
+                            this.shootParticlesTo()
+                            break;
+    
+                        
+                        
+                            // shoots
+                            
+                    }
+    
+                    if(this.shootFired){
+                        return
+                    }
+                }
+                this.shootFired= false
+            })
+    
+            
+        
 
         // create Player on the start pos
         //this.playerPos = this.createPlayer();
@@ -228,7 +316,9 @@ class Game {
         // listen to spacebar press
         
     }
-}
+}}
+
+
 const game = new Game()
 
 //let playerPos = game.createPlayer()

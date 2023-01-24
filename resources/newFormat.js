@@ -8,23 +8,29 @@ const container = document.getElementById("view");
 
 
 
-
+// dynamic creation of the field
 
 function createPlayground(form){
+
+    // get the value from the form to establish the lanes
     rows = form.rows.value
 
+    // handle error input
     if(rows == 0 || rows == 1){
         return
     }
+    // for better coordination across the moveable fields for the player
     rows ++;
 
+    // switches the screen view
     document.getElementById("setup").style.display = "none"
     document.getElementById("information").style.display = "block"
 
-        // instantiate playground
+    // instantiate playground
     for(let i = 0; i <= rows; i++){
         playground.push([])
 
+        // create a 2dim array / matrix
         playground[i].push(new Array(elements))
         let row = document.createElement("ul");
 
@@ -62,10 +68,11 @@ function createPlayground(form){
         
     }
 
+    // push all moveable fields into an array for better control later
     for(let k = 1; k < rows ; k++){
         moveableFields.push(playground[k][10])
     }
 
-    console.log(moveableFields)
+    //console.log(moveableFields)
 }
 
