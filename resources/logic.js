@@ -2,21 +2,18 @@
     main script with the logic behind this game
     creates a game class where all the input is handled and converted
 */
+let newGame
 
 // is triggered by clicking the button after getting game over
 function createGame(){
     
     // switches screen view
-    document.getElementById("gameover").style.display = "none"
 
     run= true
-
     // instantiate new player and new game with the default settings
     let newPlayer = new Player()
-    
-  
    
-    let newGame = new Game(newPlayer, moveableFields)
+    newGame = new Game(newPlayer, moveableFields)
 
     // awaits key input of the player
 
@@ -34,8 +31,8 @@ function createGame(){
     
     
 
-    
-}
+} 
+
 
 
 // starts the game when the window is loaded
@@ -47,21 +44,13 @@ window.onload = function(){
 // game object
 class Game {
 
-   
-   
     // setting the score 
     score = 0
-
-    //possibleFieldsToMove = [];
-
-
 
     constructor(player, moveableFields) {
 
         // get all the lanes of the html site 
         // later generate a specific amount of lanes and store them into this variable
-  
-
         // the obstacles should run async to avoid any other runtime errors
         this.timer = ms => new Promise(res => setTimeout(res, ms));
         this.shootTimer = ms => new Promise(res => setTimeout(res, ms))
@@ -85,16 +74,22 @@ class Game {
 
     // start this method to run all things
     start() {
-        document.getElementById("view").style.display = "flex";
-        // safe possible spots to walk in array
+        run = true
         this.score = 0
+        this.tilesAmount = 0
+        document.getElementById("view").style.display = "flex";
+        document.getElementById("gameover").style.display = "none"
+        
+        this.score = 0
+        
+        this.tilesAmount = 0
         this.player.instantiatePlayer()
-       // this.shootParticlesTo()
+      
         // set the default state of the player
         this.createPlayer(this.player.playerPosition)
 
         // run gameloop in intervals
-      
+        document.getElementById("score").innerHTML = "Your score is: " + this.score
         setInterval(this.gameLoop.bind(this), this.interval/this.fps)
         
         
@@ -111,8 +106,6 @@ class Game {
 
     }
 
- 
-
     // creates the player at the beginning
     createPlayer(position) {
 
@@ -122,9 +115,6 @@ class Game {
         this.playerPos.innerHTML = this.player.playerCharacter
 
     }
-
-    
-
 
     // update the player after every frame and handle events
     updatePlayer() {
@@ -185,19 +175,19 @@ class Game {
         for( let i = currLane.length - 2; i > 0; i--){
 
             // check if there is any collision with obstacle
-            if(currLane[i].innerHTML != ""){
-                console.log("Detect")
-
-
-            }
+            
             // move the particle 
             currLane[i].innerHTML = this.shootParticleItem
 
             if((i +1 ) != currLane.length - 1 ){
                 currLane[i +1].innerHTML = ""
             }
+
+            if(i == 1){
+                currLane[i].innerHTML = ""
+            }
             
-            await this.shootTimer(this.tempo)
+            await this.timer(this.tempo)
             // check if particle reaches top
         }
     }
@@ -208,7 +198,7 @@ class Game {
          // We need to wrap the loop into an async function for this to work
         let randNum = Math.floor(Math.random() * ( moveableFields.length )) + 1
         let currLane = playground[randNum];
-       
+        let isDestroyed = false
         //let tiles = currLane.getElementsByTagName("li");
        
 
@@ -216,38 +206,53 @@ class Game {
             this.tilesAmount++
             this.tileOnScreen = true
             for (let i = 0; i < currLane.length; i++) {
-                if (i == playground[randNum].length -1) {
-                    if(playground[randNum][i].innerHTML ===  this.player.playerCharacter ){
-                        console.log("game over")
-                        this.gameOver()
-                    }else if(playground[randNum][i].innerHTML ===  this.shootParticleItem || playground[randNum][i - 1].innerHTML ===  this.shootParticleItem ||playground[randNum][i + 1].innerHTML ===  this.shootParticleItem) {
+                if(isDestroyed == false){
+                    
 
-                        // check Collision with shoot particle
-                        playground[randNum][i].innerHTML == ""
-                        return
+                    if(playground[randNum][i].innerHTML === this.shootParticleItem ){
+                        isDestroyed = true
+                        console.log("hit")
+
+                        // add score
+                        this.score ++
+                        document.getElementById("score").innerHTML = "Your score is: " + this.score
+                        // destroy 
+                        break
                     }
 
+                    if (i != 0 ) {
+                        playground[randNum][i - 1].innerHTML = ""
+                    }
+
+
+                    if (i == playground[randNum].length -1 ) {
+                        if(playground[randNum][i].innerHTML ===  this.player.playerCharacter){
+                            console.log("game over")
+                            this.gameOver()
+                        }
+    
+                        
+                        //playground[randNum][i].innerHTML = ""
+                        this.tileOnScreen = false
+                    }
+                    // draw the obstacle after all checking
+                    playground[randNum][i].innerHTML = "*"
                     
-                    playground[randNum][i].innerHTML = ""
-                    this.tileOnScreen = false
+                    if(playground[randNum][playground[randNum].length - 1].innerHTML == "*"){
+                        playground[randNum][playground[randNum].length - 1].innerHTML = ""
+                    }
+                    
+                    await this.timer(this.tempo); // then the created Promise can be awaited
+                }else{
+                    
                 }
-
-                //this.score ++;
-                //document.getElementById("score").innerHTML = this.score
-                playground[randNum][i].innerHTML = "*"
-
-                if (i != 0 ) {
-                    playground[randNum][i - 1].innerHTML = ""
-                }
-
-                await this.timer(this.tempo); // then the created Promise can be awaited
+                
 
                 
             }
-            
-            
-            playground[randNum][playground[randNum].length - 1].innerHTML = ""
             this.tilesAmount--;
+            
+            
 
         }
             
@@ -267,8 +272,8 @@ class Game {
         gameTable.style.display = "none"
         run = false
         
-
-        delete this
+       
+        
         
     }
 
@@ -319,7 +324,7 @@ class Game {
 }}
 
 
-const game = new Game()
+//let game = new Game()
 
 //let playerPos = game.createPlayer()
 //game.savePossibleFields()

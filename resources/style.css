@@ -182,6 +182,10 @@ form #submit:hover{
     color: green;
 }
 
+#score{
+    padding: 5% 0;
+    line-height: 2rem;
+}
 
 
 /* star animation */
